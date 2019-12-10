@@ -83,11 +83,10 @@ app.put("/image", (req, res) => {
     const id = req.body.id;
     let found = false;
     database.users.forEach(user => {
-        found = true;
-        if (user.id == id) return res.json(++user.entries);
+        if (user.id == id) {found = true; return res.json(++user.entries)};
     })
     if (!found) {
-        // res.status(404).json("no such user found")
+        res.status(404).json("no such user found")
     }
 })
 
