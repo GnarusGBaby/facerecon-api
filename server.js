@@ -1,34 +1,50 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
+const knex = require("knex");
+//importing my own db credentials from a file
+const dbPassword = require("./dbpass").dbPassword;
+
+const db = knex({
+    client: "pg",
+    connection: {
+        host : 'localhost',
+        user : 'gnarus',
+        password : dbPassword,
+        database: 'facerecon'
+    }
+});
+
+db.select('*').from("users")
+.then(data => console.log('data', data))
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const database = {
-    users: [
-        {
-            id: 123,
-            name: "Joe",
-            email: "john@gmail.com",
-            // password: "cookies",
-            passwordEnc: "$2a$10$UgAk98mZySWsZfo9RGYjVOizctiLAAPS7K5vcB4Ip0/UlFjfU2Unm",
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id: "143",
-            name: "Amy",
-            email: "amy@gmail.com",
-            // password: "love",
-            passwordEnc: "$2a$10$gMZwt.cNo2qgpt8AJLUvCuTt24j/g513uHIPL5U/NGY7sXiWRl9jG",
-            entries: 0,
-            joined: new Date()
-        }
-    ]
-}
+// const database = {
+//     users: [
+//         {
+//             id: 123,
+//             name: "Joe",
+//             email: "john@gmail.com",
+//             // password: "cookies",
+//             passwordEnc: "$2a$10$UgAk98mZySWsZfo9RGYjVOizctiLAAPS7K5vcB4Ip0/UlFjfU2Unm",
+//             entries: 0,
+//             joined: new Date()
+//         },
+//         {
+//             id: "143",
+//             name: "Amy",
+//             email: "amy@gmail.com",
+//             // password: "love",
+//             passwordEnc: "$2a$10$gMZwt.cNo2qgpt8AJLUvCuTt24j/g513uHIPL5U/NGY7sXiWRl9jG",
+//             entries: 0,
+//             joined: new Date()
+//         }
+//     ]
+// }
 
 app.get("/", (req, res) => {
     res.send(database.users);
