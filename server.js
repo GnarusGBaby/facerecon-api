@@ -59,9 +59,10 @@ app.post("/register", (req, res) => {
             entries: 0,
             joined: new Date()
         })
-        console.log("user, just registered:", database.users[database.users.length - 1]);
-        res.json("Success registering")
-    }).catch(err => console.log(err));
+        thisUser = database.users[database.users.length - 1];
+        console.log("user, just registered:", thisUser);
+        res.json(thisUser)
+    }).catch(err => {console.log(err); res.json("Failure registering")});
 
     // res.json(database.users[database.users.length - 1]);
 })
