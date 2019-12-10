@@ -75,7 +75,8 @@ app.post("/register", (req, res) => {
             joined: new Date()
         }).then(response => {
             res.json(response);
-        })
+        }).catch(res.status(400).json("Invalid Field Entries"));
+
     }).catch(err => {
         console.log(err);
         res.json("Failure registering");
