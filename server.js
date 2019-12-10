@@ -39,7 +39,7 @@ app.post("/signin", (req, res) => {
     if (req.body.email === database.users[0].email) {
         bcrypt.compare(req.body.password, database.users[0].passwordEnc).then(status => {
             console.log("password isLegit:", status);
-            status ? res.json("Success signing in") : res.status(400).json("error logging in");
+            status ? res.json(database.users[0]) : res.status(400).json("error logging in");
         }).catch(err => console.log('err', err));
     } else {
         res.status(400).json("error logging in");
