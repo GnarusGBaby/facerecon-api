@@ -8,43 +8,43 @@ const dbPassword = require("./dbpass").dbPassword;
 const db = knex({
     client: "pg",
     connection: {
-        host : 'localhost',
-        user : 'gnarus',
-        password : dbPassword,
+        host: 'localhost',
+        user: 'gnarus',
+        password: dbPassword,
         database: 'facerecon'
     }
 });
 
 db.select('*').from("users")
-.then(data => console.log('data', data))
+    .then(data => console.log('data', data))
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-// const database = {
-//     users: [
-//         {
-//             id: 123,
-//             name: "Joe",
-//             email: "john@gmail.com",
-//             // password: "cookies",
-//             passwordEnc: "$2a$10$UgAk98mZySWsZfo9RGYjVOizctiLAAPS7K5vcB4Ip0/UlFjfU2Unm",
-//             entries: 0,
-//             joined: new Date()
-//         },
-//         {
-//             id: "143",
-//             name: "Amy",
-//             email: "amy@gmail.com",
-//             // password: "love",
-//             passwordEnc: "$2a$10$gMZwt.cNo2qgpt8AJLUvCuTt24j/g513uHIPL5U/NGY7sXiWRl9jG",
-//             entries: 0,
-//             joined: new Date()
-//         }
-//     ]
-// }
+const database = {
+    users: [
+        {
+            id: 123,
+            name: "Joe",
+            email: "john@gmail.com",
+            // password: "cookies",
+            passwordEnc: "$2a$10$UgAk98mZySWsZfo9RGYjVOizctiLAAPS7K5vcB4Ip0/UlFjfU2Unm",
+            entries: 0,
+            joined: new Date()
+        },
+        {
+            id: "143",
+            name: "Amy",
+            email: "amy@gmail.com",
+            // password: "love",
+            passwordEnc: "$2a$10$gMZwt.cNo2qgpt8AJLUvCuTt24j/g513uHIPL5U/NGY7sXiWRl9jG",
+            entries: 0,
+            joined: new Date()
+        }
+    ]
+}
 
 app.get("/", (req, res) => {
     res.send(database.users);
@@ -67,18 +67,19 @@ app.post("/register", (req, res) => {
     const { name, email, password } = req.body;
 
     bcrypt.hash(password, 10).then(hash => {
-        database.users.push({
-            id: "129",
+        // insert new user into db and return it as network response
+        db("users").returning("*").insert({
             name: name,
             email: email,
-            passwordEnc: hash,
-            entries: 0,
+            passwordenc: hash,
             joined: new Date()
+        }).then(response => {
+            res.json(response);
         })
-        thisUser = database.users[database.users.length - 1];
-        console.log("user, just registered:", thisUser);
-        res.json(thisUser)
-    }).catch(err => {console.log(err); res.json("Failure registering")});
+    }).catch(err => {
+        console.log(err);
+        res.json("Failure registering");
+    });
 
     // res.json(database.users[database.users.length - 1]);
 })
@@ -99,7 +100,7 @@ app.put("/image", (req, res) => {
     const id = req.body.id;
     let found = false;
     database.users.forEach(user => {
-        if (user.id == id) {found = true; return res.json(++user.entries)};
+        if (user.id == id) { found = true; return res.json(++user.entries) };
     })
     if (!found) {
         res.status(404).json("no such user found")
