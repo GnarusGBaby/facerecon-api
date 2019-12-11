@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const knex = require("knex");
 //importing my own db credentials from a file
-const dbPassword = require("./dbpass").dbPassword;
+const dbPassword = require("./secrets").dbPassword;
 
 //load controllers
 const signin = require("./controllers/signin");
@@ -33,6 +33,8 @@ app.post("/register", (req, res) => register.handleRegister(req, res, db, bcrypt
 app.get("/profile/:id", (req, res) => profile.handleProfileGet(req, res, db));
 
 app.put("/image", (req, res) => image.handleImage(req, res, db));
+
+app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
 
 
 app.listen(3333, () => {

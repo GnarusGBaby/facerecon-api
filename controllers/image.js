@@ -1,3 +1,20 @@
+const Clarifai = require("clarifai");
+const myapikey = require("../secrets").myapikey;
+
+// Instantiate a new Clarifai app by passing in the API key.
+const app = new Clarifai.App({ apiKey: myapikey });
+
+const handleClarifaiCall = (req, res) => {
+    // console.log('req body', req.body)
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, req.body.imageUrl)
+    .then(response => {
+        res.json(response);
+    })
+    .catch(err => {
+        console.log('err', err)
+        res.status(400).json("unable to work with api")
+    })
+}
 const handleImage = (req, res, db) => {
     const id = req.body.id;
     //update by id the user's entries value, and return it as a response
@@ -12,5 +29,6 @@ const handleImage = (req, res, db) => {
 }
 
 module.exports = {
-    handleImage
+    handleImage,
+    handleClarifaiCall
 }
