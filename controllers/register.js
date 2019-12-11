@@ -19,11 +19,7 @@ const handleRegister = (req, res, db, bcrypt) => {
         }).then(users => {
             res.json(users[0]);
         }).catch(err => {
-<<<<<<< HEAD
             console.log("/register, error:", err);
-=======
-            console.log("/register, error:");
->>>>>>> f45a8569dc9d9ba914e4b6b234d0aabec52a42c8
             res.status(400).json("Invalid Field Entries")
         });
 
