@@ -59,8 +59,8 @@ app.post("/register", (req, res) => {
             email: email,
             passwordenc: hash,
             joined: new Date()
-        }).then(response => {
-            res.json(response);
+        }).then(users => {
+            res.json(users[0]);
         }).catch(err => res.status(400).json("Invalid Field Entries"));
 
     }).catch(err => {
