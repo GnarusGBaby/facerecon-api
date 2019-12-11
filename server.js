@@ -15,17 +15,14 @@ const db = knex({
     }
 });
 
-db.select('*').from("users")
-    .then(data => console.log('data', data))
-
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-    // res.send(database.users);
-})
+// app.get("/", (req, res) => {
+
+// })
 
 app.post("/signin", (req, res) => {
     console.log("/signin, request body:", req.body);
