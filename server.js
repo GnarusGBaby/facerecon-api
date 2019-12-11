@@ -14,10 +14,8 @@ const image = require("./controllers/image");
 const db = knex({
     client: "pg",
     connection: {
-        host: 'localhost',
-        user: 'gnarus',
-        password: dbPassword,
-        database: 'facerecon'
+        connectionString: process.env.DATABASE_URL,
+        ssl : true
     }
 });
 
