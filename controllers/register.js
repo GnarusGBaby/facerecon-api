@@ -1,4 +1,4 @@
-function areInvalid (name, email, password){
+function areInvalid(name, email, password) {
     return (!name || !email || password.length < 8)
 }
 
@@ -6,7 +6,7 @@ function areInvalid (name, email, password){
 const handleRegister = (req, res, db, bcrypt) => {
     const { name, email, password } = req.body;
 
-    if(areInvalid(name, email, password)) return res.status(400).json("Invalid Form Submission")
+    if (areInvalid(name, email, password)) return res.status(400).json("Invalid Form Submission")
 
     //hash the password and update the database
     bcrypt.hash(password, 10).then(hash => {
@@ -18,7 +18,10 @@ const handleRegister = (req, res, db, bcrypt) => {
             joined: new Date()
         }).then(users => {
             res.json(users[0]);
-        }).catch(err => res.status(400).json("Invalid Field Entries"));
+        }).catch(err => {
+            console.log("/register, error:", err);
+            res.status(400).json("Invalid Field Entries")
+        });
 
     }).catch(err => {
         console.log(err);
