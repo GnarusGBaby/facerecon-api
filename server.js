@@ -23,49 +23,38 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const database = {
-    users: [
-        {
-            id: 123,
-            name: "Joe",
-            email: "john@gmail.com",
-            // password: "cookies",
-            passwordEnc: "$2a$10$UgAk98mZySWsZfo9RGYjVOizctiLAAPS7K5vcB4Ip0/UlFjfU2Unm",
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id: "143",
-            name: "Amy",
-            email: "amy@gmail.com",
-            // password: "love",
-            passwordEnc: "$2a$10$gMZwt.cNo2qgpt8AJLUvCuTt24j/g513uHIPL5U/NGY7sXiWRl9jG",
-            entries: 0,
-            joined: new Date()
-        }
-    ]
-}
-
 app.get("/", (req, res) => {
-    res.send(database.users);
+    // res.send(database.users);
 })
 
 app.post("/signin", (req, res) => {
-    console.log("request body:", req.body)
-    if (req.body.email === database.users[0].email) {
-        bcrypt.compare(req.body.password, database.users[0].passwordEnc).then(status => {
-            console.log("password isLegit:", status);
-            status ? res.json(database.users[0]) : res.status(400).json("error logging in");
-        }).catch(err => console.log('err', err));
-    } else {
-        res.status(400).json("error logging in");
-    }
-})
+    console.log("/signin, request body:", req.body);
+
+    //get the emails and passwords of every users whose email matches the
+    //one signin in...
+    db.select("email", "passwordenc").from("users")
+        .where({ email: req.body.email })
+        .then(data => {
+            //email matches, check if password matches
+            //return the user or error
+            if (bcrypt.compareSync(req.body.password, data[0].passwordenc)) {
+                db.select("*").from("users").where({ email: req.body.email })
+                    .then(users => {
+                        console.log('users[0]', users[0])
+                        res.json(users[0])
+                    })
+                .catch(err => res.status(400).json("unable to get user"))
+            } else {
+                res.status(400).json("wrong credentials");
+            }
+        }).catch(err => res.status(400).json("wrong credentials"));
+});
 
 app.post("/register", (req, res) => {
 
     const { name, email, password } = req.body;
 
+    //hash the password and update the database
     bcrypt.hash(password, 10).then(hash => {
         // insert new user into db and return it as network response
         db("users").returning("*").insert({
@@ -75,14 +64,12 @@ app.post("/register", (req, res) => {
             joined: new Date()
         }).then(response => {
             res.json(response);
-        }).catch(res.status(400).json("Invalid Field Entries"));
+        }).catch(err => res.status(400).json("Invalid Field Entries"));
 
     }).catch(err => {
         console.log(err);
         res.json("Failure registering");
     });
-
-    // res.json(database.users[database.users.length - 1]);
 })
 
 app.get("/profile/:id", (req, res) => {
@@ -102,7 +89,7 @@ app.put("/image", (req, res) => {
             entries: 1
         }).returning("entries")
         .then(entries => {
-            entries.length? res.json(entries[0]) : res.status(400).json("unable to update the entries");
+            entries.length ? res.json(entries[0]) : res.status(400).json("unable to update the entries");
         })
         .catch(err => res.status(400).json("unable to get entries"))
 });
