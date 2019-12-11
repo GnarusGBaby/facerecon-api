@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const knex = require("knex");
 //importing my own db credentials from a file
-const dbPassword = require("./secrets").dbPassword;
+// const dbPassword = require("./secrets").dbPassword;
 
 //load controllers
 const signin = require("./controllers/signin");
@@ -34,7 +34,7 @@ app.put("/image", (req, res) => image.handleImage(req, res, db));
 
 app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
 });
