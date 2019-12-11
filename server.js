@@ -89,21 +89,24 @@ app.get("/profile/:id", (req, res) => {
     const id = req.params.id;
 
     db.select().from("users").where({ id })
-    .then(users => {
-        users.length ? res.json(users[0]) : res.status(404).json("User not found");
-    }).catch(err => res.status(400).json("error getting user"));
+        .then(users => {
+            users.length ? res.json(users[0]) : res.status(404).json("User not found");
+        }).catch(err => res.status(400).json("error getting user"));
 })
 
 app.put("/image", (req, res) => {
     const id = req.body.id;
-    let found = false;
-    database.users.forEach(user => {
-        if (user.id == id) { found = true; return res.json(++user.entries) };
-    })
-    if (!found) {
-        res.status(404).json("no such user found")
-    }
-})
+    //update by id the user's entries value, and return it as a response
+    db("users").where({ id })
+        .increment({
+            entries: 1
+        }).returning("entries")
+        .then(entries => {
+            entries.length? res.json(entries[0]) : res.status(400).json("unable to update the entries");
+        })
+        .catch(err => res.status(400).json("unable to get entries"))
+});
+
 
 app.listen(3333, () => {
     console.log("app is running on port 3333");
