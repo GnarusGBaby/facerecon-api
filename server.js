@@ -14,13 +14,14 @@ const image = require("./controllers/image");
 const db = knex({
     client: "pg",
     connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl : true
+        host: process.env.POSTGRES_HOST,
+        user: process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DB
     }
 });
 
 const app = express();
-
 app.use(express.json());
 app.use(cors());
 
@@ -38,5 +39,5 @@ app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-    console.log(`app is running on port ${PORT}`);
+    console.log(`App is running on port ${PORT}`);
 });
