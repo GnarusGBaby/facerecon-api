@@ -16,15 +16,13 @@ services:
             POSTGRES_PASSWORD: pass
             POSTGRES_DB: facerecon
             POSTGRES_HOST: database
-        links: 
-            - database
         volumes: 
             - ./:/usr/src/facerecon_api
     
     database:
         container_name: db
         restart: always
-        image: postgres
+        build: database
         ports: 
             - "5555:5432"
         environment:
