@@ -10,6 +10,7 @@ const signin = require("./controllers/signin");
 const register = require("./controllers/register");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
+const newsfeed = require("./controllers/newsfeed");
 
 const db = knex({
     client: "pg",
@@ -35,6 +36,8 @@ app.get("/profile/:id", (req, res) => profile.handleProfileGet(req, res, db));
 app.put("/image", (req, res) => image.handleImage(req, res, db));
 
 app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
+
+app.get("/newsfeed", (req, res) => newsfeed.handleNewsFeed(req, res));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
