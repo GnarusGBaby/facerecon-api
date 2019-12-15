@@ -7,7 +7,7 @@ function handleNewsFeed(req, res) {
         console.log(response);
         res.json(response.articles);
     }).catch(err => {
-        console.log(err)
+        console.log(err);
         res.status(400).json("unable to get headlines")
     })
 }
