@@ -37,7 +37,7 @@ app.put("/image", (req, res) => image.handleImage(req, res, db));
 
 app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
 
-app.get("/newsfeed", (req, res) => newsfeed.handleNewsFeed(req, res));
+app.post("/newsfeed", (req, res) => newsfeed.handleNewsFeed(req, res));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
