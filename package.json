@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon"
+    "start": "if [${NODE_ENV} == 'production' ]; then node; else nodemon; fi"
   },
   "author": "",
   "license": "ISC",
