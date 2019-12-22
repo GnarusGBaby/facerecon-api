@@ -16,7 +16,7 @@ const handleSignin = (req, res, db, bcrypt) => {
                     })
                     .catch(err => Promise.reject("Unable to get user"))
             } else {
-                Promise.reject("Wrong credentials");
+                return Promise.reject("Wrong credentials");
             }
         }).catch(err => Promise.reject("Wrong credentials"));
 };
@@ -44,6 +44,7 @@ const signinAuthentication = (req, res, db, bcrypt) => {
             .then(user => createSessions(user))
             .then(session => res.json(session))
             .catch(err => res.status(400).json(err))
+            
 }
 
 module.exports = {
