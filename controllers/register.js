@@ -2,7 +2,6 @@ function areInvalid(name, email, password) {
     return (!name || !email || password.length < 8)
 }
 
-
 const handleRegister = (req, res, db, bcrypt) => {
     const { name, email, password } = req.body;
 
