@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const redis = require("redis");
 
 //redis setup:
-const redisClient = redis.createClient({ host: "redis" })
+const redisClient = redis.createClient(process.env.REDIS_URL)
 
 const handleSignin = (req, res, db, bcrypt) => {
     //get the emails and passwords of every users whose email matches the
