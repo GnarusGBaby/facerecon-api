@@ -1,5 +1,6 @@
 const handleProfileGet = (req, res, db) => {
     const id = req.params.id;
+    // console.log('id', id)
 
     db.select().from("users").where({ id })
         .then(users => {

@@ -11,7 +11,7 @@ const handleClarifaiCall = (req, res) => {
     })
     .catch(err => {
         console.log('err', err)
-        res.status(400).json("unable to work with api")
+        res.status(400).json("unable to work that request, try again")
     })
 }
 const handleImage = (req, res, db) => {

@@ -28,7 +28,7 @@ const handleSignin = (req, res, db, bcrypt) => {
 const getAuthTokenId = (req, res) => {
     const { authorization } = req.headers;
     return redisClient.get(authorization, (err, reply) => {
-        if (err || !reply) return res.status(400).json("Unauthorized")
+        if (err || !reply) return res.status(401).json("Unauthorized")
         return res.json({id: reply})
     })
 }
@@ -63,5 +63,6 @@ const signinAuthentication = (req, res, db, bcrypt) => {
 }
 
 module.exports = {
-    signinAuthentication
+    signinAuthentication,
+    redisClient
 }

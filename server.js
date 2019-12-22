@@ -12,6 +12,7 @@ const register = require("./controllers/register");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 const newsfeed = require("./controllers/newsfeed");
+const auth = require("./controllers/authorization")
 
 const db = knex({
     client: "pg",
@@ -29,15 +30,17 @@ app.get("/", (req, res)=> res.send("It's alive!!! IT'S ALI... point made."))
 
 app.post("/signin", (req, res) => signin.signinAuthentication(req, res, db, bcrypt));
 
+app.post("/signout", (req, res) => signout.handleSignout(req, res, db, bcrypt));
+
 app.post("/register", (req, res) => register.handleRegister(req, res, db, bcrypt));
 
-app.get("/profile/:id", (req, res) => profile.handleProfileGet(req, res, db));
+app.get("/profile/:id", auth.requireAuth, (req, res) => profile.handleProfileGet(req, res, db));
 
-app.post("/profile/:id", (req, res) => profile.handleProfileUpdate(req, res, db));
+app.post("/profile/:id", auth.requireAuth, (req, res) => profile.handleProfileUpdate(req, res, db));
 
-app.put("/image", (req, res) => image.handleImage(req, res, db));
+app.put("/image", auth.requireAuth, (req, res) => image.handleImage(req, res, db));
 
-app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
+app.post("/imageurl", auth.requireAuth, (req, res) => image.handleClarifaiCall(req, res));
 
 app.post("/newsfeed", (req, res) => newsfeed.handleNewsFeed(req, res));
 
