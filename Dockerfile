@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:alpine
 
 WORKDIR /usr/src/facerecon_api
 
@@ -6,4 +6,4 @@ COPY ./ ./
 
 RUN npm install
 
-CMD ["/bin/bash"]
+CMD ["npm", "start"]
