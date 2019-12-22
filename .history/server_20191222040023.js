@@ -32,13 +32,13 @@ app.post("/signin", (req, res) => signin.signinAuthentication(req, res, db, bcry
 
 app.post("/register", (req, res) => register.handleRegister(req, res, db, bcrypt));
 
-app.get("/profile/:id", auth.requireAuth, (req, res) => profile.handleProfileGet(req, res, db));
+app.get("/profile/:id", (req, res) => profile.handleProfileGet(req, res, db));
 
-app.post("/profile/:id", auth.requireAuth, (req, res) => profile.handleProfileUpdate(req, res, db));
+app.post("/profile/:id", (req, res) => profile.handleProfileUpdate(req, res, db));
 
-app.put("/image", auth.requireAuth, (req, res) => image.handleImage(req, res, db));
+app.put("/image", (req, res) => image.handleImage(req, res, db));
 
-app.post("/imageurl", auth.requireAuth, (req, res) => image.handleClarifaiCall(req, res));
+app.post("/imageurl", (req, res) => image.handleClarifaiCall(req, res));
 
 app.post("/newsfeed", (req, res) => newsfeed.handleNewsFeed(req, res));
 
