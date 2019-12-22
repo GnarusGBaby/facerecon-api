@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 const handleSignin = (req, res, db, bcrypt) => {
     //get the emails and passwords of every users whose email matches the
     //one signin in...
@@ -23,11 +25,24 @@ const getAuthTokenId = () => {
     console.log('auth ok')
 }
 
+const signToken = (email) => {
+    const jwtPayload = {email};
+    return jwt.sign(jwtPayload, process.env.JWT_SECRET, {expiresIn: "20m"});
+}
+
+const createSessions = (user) => {
+    //create JWT token
+    const token = signToken(user.email);
+    //return user data
+    return { success: "true", userId: user.id, token }
+}
+
 const signinAuthentication = (req, res, db, bcrypt) => {
     const { authorization } = req.headers;
     return authorization ? getAuthTokenId() :
         handleSignin(req, res, db, bcrypt)
-            .then(data => res.json(data))
+            .then(user => createSessions(user))
+            .then(session => res.json(session))
             .catch(err => res.status(400).json(err))
 }
 
