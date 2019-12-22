@@ -1,5 +1,7 @@
 /node_modules
 secrets.js
 .env
+Dockerfile.web
+Dockerfile.redis
 /.vscode
 /.history
