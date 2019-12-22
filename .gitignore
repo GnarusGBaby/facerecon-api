@@ -1,7 +1,4 @@
 /node_modules
 secrets.js
-<<<<<<< HEAD
 .env
-=======
 /.vscode
->>>>>>> dockered

@@ -7,7 +7,6 @@ const handleProfileGet = (req, res, db) => {
         }).catch(err => res.status(400).json("error getting user"));
 }
 
-<<<<<<< HEAD
 const handleProfileUpdate = (req, res, db) => {
     const id = req.params.id;
     const { name, email } = req.body.formInput;
@@ -23,8 +22,4 @@ const handleProfileUpdate = (req, res, db) => {
 module.exports = {
     handleProfileGet,
     handleProfileUpdate
-=======
-module.exports = {
-    handleProfileGet
->>>>>>> dockered
 }
