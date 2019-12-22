@@ -8,6 +8,7 @@ const knex = require("knex");
 
 //load controllers
 const signin = require("./controllers/signin");
+const signout = require("./controllers/signout");
 const register = require("./controllers/register");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
@@ -30,7 +31,7 @@ app.get("/", (req, res)=> res.send("It's alive!!! IT'S ALI... point made."))
 
 app.post("/signin", (req, res) => signin.signinAuthentication(req, res, db, bcrypt));
 
-app.post("/signout", (req, res) => signout.handleSignout(req, res, db, bcrypt));
+app.post("/signout", (req, res) => signout.handleSignOut(req, res));
 
 app.post("/register", (req, res) => register.handleRegister(req, res, db, bcrypt));
 
