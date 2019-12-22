@@ -14,15 +14,9 @@ services:
         volumes: 
             - ./:/usr/src/facerecon_api
 
-
-    # We'll the heroku postgres databe instead
-    # database:
-    #     container_name: db
-    #     restart: always
-    #     build: database
-    #     ports: 
-    #         - "5555:5432"
-    #     environment:
-    #         POSTGRES_USER: gnarus
-    #         POSTGRES_PASSWORD: pass
-    #         POSTGRES_DB: facerecon
+    redis:
+        image: redis
+        restart: always
+        container_name: sessionDB
+        ports: 
+            - 6379:6379

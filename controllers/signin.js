@@ -1,4 +1,8 @@
 const jwt = require("jsonwebtoken");
+const redis = require("redis");
+
+//redis setup:
+const redisClient = redis.createClient({ host: "redis" })
 
 const handleSignin = (req, res, db, bcrypt) => {
     //get the emails and passwords of every users whose email matches the
@@ -26,15 +30,23 @@ const getAuthTokenId = () => {
 }
 
 const signToken = (email) => {
-    const jwtPayload = {email};
-    return jwt.sign(jwtPayload, process.env.JWT_SECRET, {expiresIn: "20m"});
+    const jwtPayload = { email };
+    return jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: "20m" });
+}
+
+const setToken = (key, value) => {
+    return Promise.resolve(redisClient.set(key, value))
 }
 
 const createSessions = (user) => {
     //create JWT token
     const token = signToken(user.email);
     //return user data
-    return { success: "true", userId: user.id, token }
+    return setToken(token, user.id)
+        .then(() => {
+            return { success: "true", userId: user.id, token }
+        })
+        .catch(console.log)
 }
 
 const signinAuthentication = (req, res, db, bcrypt) => {
@@ -44,7 +56,6 @@ const signinAuthentication = (req, res, db, bcrypt) => {
             .then(user => createSessions(user))
             .then(session => res.json(session))
             .catch(err => res.status(400).json(err))
-            
 }
 
 module.exports = {
